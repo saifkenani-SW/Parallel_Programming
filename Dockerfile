@@ -1,4 +1,3 @@
-
 FROM node:20-alpine As development
 
 WORKDIR /app
@@ -25,7 +24,7 @@ COPY . .
 # COPY --from=development /app/dist ./dist
 
 EXPOSE 3000 9229
+
 CMD ["node", "--inspect=0.0.0.0:9229", "-r", "ts-node/register", "src/main.ts"]
+
 # CMD ["node", "dist/main"]
-
-
