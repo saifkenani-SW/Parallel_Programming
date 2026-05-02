@@ -1,17 +1,30 @@
-# Stage 1: Development & Build (مرحلة التطوير والبناء)
-FROM node:24-alpine AS builder
-WORKDIR /usr/src/app
+FROM node:20-alpine As development
+
+WORKDIR /app
+
 COPY package*.json ./
-RUN npm ci
+
+RUN npm install
+
 COPY . .
-RUN npm run build
 
-# Stage 2: Production (مرحلة الإنتاج)
-FROM node:24-alpine AS production
-WORKDIR /usr/src/app
-COPY package*.json ./
-RUN npm ci --omit=dev
-COPY --from=builder /usr/src/app/dist ./dist
+# RUN npm run build
 
-EXPOSE 3000
-CMD ["node", "dist/main"]
+# FROM node:20-alpine as production
+
+# ARG NODE_ENV=production
+# ENV NODE_ENV=${NODE_ENV}
+
+# WORKDIR /app
+
+# COPY package*.json ./
+
+# RUN npm install --only=production
+
+# COPY --from=development /app/dist ./dist
+
+EXPOSE 3000 9229
+
+CMD ["node", "--inspect=0.0.0.0:9229", "-r", "ts-node/register", "src/main.ts"]
+
+# CMD ["node", "dist/main"]
